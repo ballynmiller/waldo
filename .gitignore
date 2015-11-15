@@ -1,0 +1,10 @@
+# ignore virtual environments
+.venv/
+env/
+
+# ignore test items
+.tox/
+*info/
+
+# general ignored items
+*.pyc
