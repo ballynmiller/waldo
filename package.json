@@ -1,0 +1,27 @@
+{
+  "name": "waldo",
+  "version": "0.0.1",
+  "description": "search twitter wikipedia",
+  "main": "dest/js/main.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ballynmiller/waldo.git"
+  },
+  "keywords": [
+    "search",
+    "twitter",
+    "wikipedia"
+  ],
+  "author": "Ballyn Miller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ballynmiller/waldo/issues"
+  },
+  "homepage": "https://github.com/ballynmiller/waldo"
+}

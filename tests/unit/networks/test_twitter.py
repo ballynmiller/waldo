@@ -1,33 +1,112 @@
 import unittest
+import mock
 
-from api import networks
-from mock import patch
+from api.exceptions import exceptions
+from api.networks import twitter
 
 
 class TwitterNetworkTest(unittest.TestCase):
 
-    @patch('api.networks.Twitter.requests')
-    def test_connection(self, mockedRequests):
-        connection = networks.Twitter()
-        self.assertTrue(connection.status())
+    def test_connection(self):
+        connection = twitter.Twitter()
+        self.assertIsInstance(connection, twitter.Twitter)
 
-    @patch('api.networks.Twitter.requests')
+    @mock.patch('api.networks.twitter.requests')
     def test_search(self, mockedRequests):
-        connection = networks.Twitter()
-        self.assertEqual(connection.get_feed("test"), {
-            "name": "test"
-        })
+        response = mock.Mock()
+        response.json.return_value = {
+            'access_token': 'TestToken',
+            'statuses': [
+                {
+                    'test': 'name'
+                }
+            ]
+        }
+        response.status_code = 200
 
-    @patch('api.networks.Twitter.requests')
-    def test_geo_search(self, mockedRequests):
-        connection = networks.Twitter()
-        self.assertEqual(connection.get_feed("test", lat=0, lng=0), {
-            "latitude": 0,
-            "longitude": 0,
-            "name": "test"
-        })
+        mockedRequests.post.return_value = response
+        mockedRequests.get.return_value = response
 
-    @patch('api.networks.Twitter.requests')
+        connection = twitter.Twitter()
+        connection.request_token()
+
+        self.assertEqual(connection.get_feed("test"), [
+            {
+                "test": "name"
+            }
+        ])
+
+    def test_search_no_token(self):
+        connection = twitter.Twitter()
+        with self.assertRaises(exceptions.NoBearerToken):
+            connection.get_feed("test")
+
+    @mock.patch('api.networks.twitter.requests')
+    def test_search_not_found(self, mockedRequests):
+        response = mock.Mock()
+        response.status_code = 500
+
+        mockedRequests.get.return_value = response
+
+        connection = twitter.Twitter()
+        connection.bearer_token = True
+        with self.assertRaises(exceptions.TwitterException):
+            connection.get_feed("test")
+
+    def test_token_request_found(self):
+        connection = twitter.Twitter()
+        connection.bearer_token = True
+
+        self.assertIsNone(connection.request_token())
+
+    @mock.patch('api.networks.twitter.requests')
+    def test_invalidate_token_failure(self, mockedRequests):
+        response = mock.Mock()
+        response.status_code = 500
+
+        mockedRequests.post.return_value = response
+
+        with self.assertRaises(exceptions.TwitterException):
+            connection = twitter.Twitter()
+            connection.bearer_token = True
+            connection.invalidate_token()
+
+    @mock.patch('api.networks.twitter.requests')
+    def test_invalidate_token(self, mockedRequests):
+        response = mock.Mock()
+        response.status_code = 200
+
+        mockedRequests.post.return_value = response
+
+        connection = twitter.Twitter()
+        connection.bearer_token = True
+        connection.invalidate_token()
+
+        self.assertIsNone(connection.bearer_token)
+
+    def test_invalidate_without_token(self):
+        connection = twitter.Twitter()
+        self.assertIsNone(connection.invalidate_token())
+
+    # @mock.patch('api.networks.twitter.requests')
+    # def test_search_failure(self):
+    #
+    #
+    # @mock.patch('api.networks.twitter.requests')
+    # def test_geo_search(self, mockedRequests):
+    #     connection = twitter.Twitter()
+    #     self.assertEqual(connection.get_feed("test", lat=0, lng=0), {
+    #         "latitude": 0,
+    #         "longitude": 0,
+    #         "name": "test"
+    #     })
+
+    @mock.patch('api.networks.twitter.requests')
     def test_network_failure(self, mockedRequests):
-        connection = networks.Wikipedia()
-        self.assertRaises(connection.get_feed(), 504)
+        response = mock.Mock()
+        response.status_code = 500
+        mockedRequests.post.return_value = response
+
+        connection = twitter.Twitter()
+        with self.assertRaises(exceptions.TwitterException):
+            connection.request_token()

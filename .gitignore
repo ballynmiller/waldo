@@ -5,6 +5,9 @@ env/
 # ignore test items
 .tox/
 *info/
+tests/cover/
 
 # general ignored items
 *.pyc
+.DS_Store
+.eggs/
