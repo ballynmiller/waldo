@@ -1,7 +1,7 @@
 import unittest
 import mock
 
-from api.exceptions import exceptions
+from api.errors import exceptions
 from api.networks import twitter
 
 
@@ -18,7 +18,8 @@ class TwitterNetworkTest(unittest.TestCase):
             'access_token': 'TestToken',
             'statuses': [
                 {
-                    'test': 'name'
+                    'created_at': "0",
+                    'text': 'Testing'
                 }
             ]
         }
@@ -30,9 +31,11 @@ class TwitterNetworkTest(unittest.TestCase):
         connection = twitter.Twitter()
         connection.request_token()
 
-        self.assertEqual(connection.get_feed("test"), [
+        self.assertEqual(connection.get_feed("test").create_response(), [
             {
-                "test": "name"
+                'application': 'twitter',
+                'created_date': '0',
+                'message': 'Testing'
             }
         ])
 

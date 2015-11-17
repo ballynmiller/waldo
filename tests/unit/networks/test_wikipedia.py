@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-from api.exceptions import exceptions
+from api.errors import exceptions
 from api.networks import wikipedia
 
 
@@ -15,19 +15,28 @@ class WikipediaNetworkTest(unittest.TestCase):
     def test_search(self, mockedRequests):
         response = mock.Mock()
         response.json.return_value = {
-            "search": [
-                {
-                    "test": "name"
-                }
-            ]
+            "query": {
+                'search': [
+                    {
+                        "timestamp": "0",
+                        "title": "Testing",
+                        "snippet": "This is a test"
+                    }
+                ]
+            }
         }
         response.status_code = 200
 
         mockedRequests.get.return_value = response
         connection = wikipedia.Wikipedia()
-        self.assertEqual(connection.get_feed("test"), [{
-            "test": "name"
-        }])
+        self.assertEqual(connection.get_feed("test").create_response(), [
+            {
+                'application': 'wikipedia',
+                'message': 'This is a test',
+                'title': 'Testing',
+                'created_date': '0'
+            }
+        ])
 
     # @mock.patch('api.networks.wikipedia.requests')
     # def test_geo_search(self, mockedRequests):
@@ -47,5 +56,5 @@ class WikipediaNetworkTest(unittest.TestCase):
 
         mockedRequests.get.return_value = response
 
-        with self.assertRaises(exceptions.WikipediaException) as we:
+        with self.assertRaises(exceptions.WikipediaException):
             connection.get_feed("test")

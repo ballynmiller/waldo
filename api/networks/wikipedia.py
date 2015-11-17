@@ -1,7 +1,8 @@
-import base
 import requests
 
-from ..exceptions import exceptions
+from api.errors import exceptions
+from api.networks import base
+from api.responses import wikipedia
 
 
 class Wikipedia(base.NetworkBase):
@@ -21,4 +22,4 @@ class Wikipedia(base.NetworkBase):
         if resp.status_code is not 200:
             raise exceptions.WikipediaException(resp)
 
-        return resp.json()['search']
+        return wikipedia.WikipediaResponse(resp.json()['query']['search'])

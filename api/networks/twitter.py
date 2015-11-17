@@ -2,8 +2,9 @@ import base64
 import logging
 import requests
 
-import base
-from ..exceptions import exceptions
+from api.networks import base
+from api.errors import exceptions
+from api.responses import twitter
 
 
 class Twitter(base.NetworkBase):
@@ -89,4 +90,4 @@ class Twitter(base.NetworkBase):
         if resp.status_code is not 200 or "error" in resp.json():
             raise exceptions.TwitterException(resp)
 
-        return resp.json()['statuses']
+        return twitter.TwitterResponse(resp.json()['statuses'])
