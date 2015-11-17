@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-from api.exceptions import exceptions
+from api.errors import exceptions
 
 
 class ExceptionTests(unittest.TestCase):

@@ -1,5 +1,4 @@
 import unittest
-import mock
 
 from api.networks import base
 

@@ -11,3 +11,5 @@ tests/cover/
 *.pyc
 .DS_Store
 .eggs/
+build/
+ChangeLog
