@@ -13,3 +13,5 @@ tests/cover/
 .eggs/
 build/
 ChangeLog
+dist/
+node_modules/
