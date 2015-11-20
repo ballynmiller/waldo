@@ -29,15 +29,20 @@ gulp.task('synchronize', function(){
         })
         .pipe(source('main.js'))
         .pipe(buffer())
-        .pipe(gulp.dest('dist/js'))
+        .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('html', ['convert-less'], function(){
-    gulp.src("lib/index.html")
-        .pipe(gulp.dest('dist/'))
-})
+gulp.task('html', ['images', 'convert-less'], function(){
+    gulp.src("lib/*.html")
+        .pipe(gulp.dest('dist/'));
+});
 
-gulp.task('server', ['convert-less'], function(){
+gulp.task('images', function(){
+    gulp.src("lib/img/*")
+        .pipe(gulp.dest('dist/img'));
+});
+
+gulp.task('server', ['html'], function(){
     nodemon({
         script: 'server.js'
     });
@@ -61,7 +66,8 @@ gulp.task('browser-sync', function(){
 gulp.task('watch', ['browser-sync'], function(){
     gulp.watch('lib/**/*.less', ['convert-less']);
     gulp.watch('lib/**/*.html', ['html']);
+    gulp.watch('lib/**/*.{png|jpg|jpeg}', ['images']);
     gulp.watch('lib/**/*.jsx', ['synchronize']);
 })
 
-gulp.task('default', ['synchronize', 'watch', 'html', 'convert-less', 'server']);
+gulp.task('default', ['synchronize', 'watch', 'html', 'images', 'convert-less', 'server']);

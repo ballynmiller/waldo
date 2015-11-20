@@ -1,3 +1,4 @@
+import Body from './components/body';
 import Header from './components/header';
 
 var $ = require('jquery')
@@ -6,10 +7,33 @@ var reactDom = require('react-dom');
 
 
 var Waldo = React.createClass({
+    getInitialState: function(){
+        return {
+            data: JSON.parse(sessionStorage.getItem("feeds")) || [],
+        };
+    },
+    buttonSearch: function(text){
+        $.ajax({
+            url: "http://localhost:5000/feeds/" + text,
+            type: "GET",
+            success: function(data){
+                this.setState({
+                    data: data['feeds']
+                });
+                sessionStorage.setItem("feeds", JSON.stringify(data['feeds']));
+                sessionStorage.setItem("text", text);
+            }.bind(this)
+        });
+    },
     render: function(){
         return (
             <div>
-                <Header />
+                <Header
+                    handleClick={this.buttonSearch}
+                />
+                <Body
+                    data={this.state.data}
+                />
             </div>
         );
     }
