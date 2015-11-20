@@ -1,4 +1,5 @@
 import flask
+from flask.ext.cors import CORS
 import logging
 
 from api.errors import exceptions
@@ -6,6 +7,7 @@ from api.networks import twitter
 from api.networks import wikipedia
 
 app = flask.Flask(__name__)
+CORS(app)
 
 
 @app.route("/feeds/<query>", methods=['GET'])

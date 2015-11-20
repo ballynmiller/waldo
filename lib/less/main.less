@@ -1,3 +1,100 @@
+@import './spinner.less';
+
 * {
-    color: red;
+    padding: 0;
+    margin: 0;
+}
+
+html{
+    min-width: 1024px;
+}
+
+header{
+    #header-body{
+        background: url('/img/tweed.png');
+        height: 100%;
+        padding: 50px 0;
+        positon: relative;
+        width: 100%;
+
+        #header-title{
+            color: #2f2e2e;
+            font-family: 'Satisfy';
+            text-shadow: 0px 0px 10px #555;
+            font-size: 75px;
+            margin: auto;
+            width: 500px;
+        }
+
+        #form-container{
+            margin: auto;
+            width: 359px;
+            button[type="submit"]{
+                border-bottom-left-radius: 0px;
+                border-top-left-radius: 0px;
+                padding: .53em 1em;
+            }
+            input[type="text"]{
+                border-bottom-right-radius: 0px;
+                border-top-right-radius: 0px;
+            }
+        }
+    }
+}
+
+.visible {
+    visibility: visible !important;
+}
+
+#container{
+    margin: 1.25em auto;
+    padding: 10px;
+    width: 80%;
+    &:after{
+        clear: both;
+        content: ".";
+        height: 0px;
+        visibility: hidden;
+    }
+    .feed-item {
+        background: #fafafa;
+        box-shadow: 0px 3px 5px #ccc;
+        float: left;
+        margin: 0 50px 30px;
+        width: 40%;
+        #text-container{
+            padding: 10px;
+        }
+        #app{
+            background: #ccc;
+            height:15px;
+            padding:5px;
+            text-transform: capitalize;
+        }
+    }
+}
+
+#content{
+    &:after{
+        clear: both;
+        content: ".";
+        display: block;
+        height: 0px;
+        visibility: hidden;
+    }
+}
+
+#info-text{
+    font-size: 2em;
+    margin: auto;
+    padding: 50px;
+    width: 13.625em;
+}
+
+#loading-container{
+    display: inline-block;
+    margin-left: 10px;
+    position: relative;
+    top: 13px;
+    visibility: hidden;
 }
