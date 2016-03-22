@@ -91,19 +91,6 @@ class TwitterNetworkTest(unittest.TestCase):
         connection = twitter.Twitter()
         self.assertIsNone(connection.invalidate_token())
 
-    # @mock.patch('api.networks.twitter.requests')
-    # def test_search_failure(self):
-    #
-    #
-    # @mock.patch('api.networks.twitter.requests')
-    # def test_geo_search(self, mockedRequests):
-    #     connection = twitter.Twitter()
-    #     self.assertEqual(connection.get_feed("test", lat=0, lng=0), {
-    #         "latitude": 0,
-    #         "longitude": 0,
-    #         "name": "test"
-    #     })
-
     @mock.patch('api.networks.twitter.requests')
     def test_network_failure(self, mockedRequests):
         response = mock.Mock()
