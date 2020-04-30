@@ -40,7 +40,7 @@
     "watchify": "^3.6.1"
   },
   "dependencies": {
-    "jquery": "^2.1.4",
+    "jquery": "^3.5.0",
     "react": "^0.14.2"
   }
 }
